@@ -1,0 +1,45 @@
+{
+  "name": "theme-build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "zsh ./compiler/tasks/build.sh",
+    "build:prod": "zsh ./compiler/tasks/build.sh --prod",
+    "build:vendor": "cd src/vendor && npm install && webpack --mode production --config webpack.config.js",
+    "watch": "zsh ./compiler/tasks/watch.sh",
+    "serve": "zsh ./compiler/tasks/serve.sh",
+    "start": "zsh ./compiler/tasks/start.sh",
+    "login": "shopify logout && shopify login --store=bergamotbeaute.myshopify.com",
+    "push": "npm run pull && npm run build:prod && cd theme && shopify theme push -x templates/*.json -x config/* -x locales/*",
+    "pull": "cd theme && shopify theme pull --nodelete -o templates/*.json -o config/* -o locales/* && cd ..",
+    "pull-settings": "cd theme && shopify theme pull --nodelete -o templates/*.json -o config/* -o locales/* && cd ..",
+    "push-with-settings": "shopify switch --store=bergamotbeaute.myshopify.com && npm run build:prod && cd theme && shopify theme push",
+    "push-new-theme": "shopify switch --store=bergamotbeaute.myshopify.com && npm run build && cd theme && shopify theme push --unpublished",
+    "dev": "shopify theme dev --theme-editor-sync",
+    "dev-push": "shopify theme push"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar": "^3.5.3",
+    "clipboard": "^2.0.11",
+    "concurrently": "^7.0.0",
+    "css-loader": "^6.6.0",
+    "glob": "^7.2.0",
+    "nvm": "0.0.4",
+    "recursive-copy": "^2.0.14",
+    "sass": "^1.51.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^4.9.2"
+  },
+  "engines": {
+    "node": ">=14.12.0"
+  },
+  "dependencies": {
+    "axios": "^0.27.2"
+  }
+}
+

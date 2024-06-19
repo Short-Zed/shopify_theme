@@ -1,0 +1,279 @@
+<div class="discount_card_list_inner">
+ {%  if section.settings.heading %}   <h2 class="heading">{{ section.settings.heading }}</h2> {%  endif %}
+ <ul class="cards">
+    {% for block in section.blocks %}
+     
+            <li class="card">
+              <a href="" >
+                <img src="{{block.settings.image | img_url:'master'}}" class="card__image" alt="Discount Image" />
+              </a>   
+                <div class="card__overlay">
+                  <div class="card__header">
+                    <svg class="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>                     
+                    <img class="card__thumb" src="{{ "discount-icon.png" |asset_url }}" alt="" />
+                    <div class="card__header-text">
+                     {% if block.settings.title %} <h3 class="card__title">{{block.settings.title}}</h3>   {% endif %}         
+                     <div class="code_wrap">
+                     {% if block.settings.code %}
+                        <button class="code" onclick="copyCode.call(this)" value="{{block.settings.code}}">{{block.settings.code}}
+                        <img class="copy_icon" src="{{ "copyicon.png" |asset_url }}"></button>
+                    {% endif %}
+                    </div>
+                    </div>
+                  </div>
+           {% if block.settings.discount_description %}{{block.settings.discount_description}}{% endif %}
+                </div>   
+            </li>   
+        
+    {% endfor %}
+</ul>
+</div>    
+
+{% schema %}
+{
+  "name": "Discount Card List",
+  "tag": "section",
+  "class": "discount_card_list",
+  "limit": 1,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    }
+  ],
+  "max_blocks": 5,
+  "blocks": [
+     {
+       "name": "card",
+       "type": "card",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+         {
+            "type": "text",
+            "id": "title",
+            "label": "Title"
+          },
+          {
+            "type": "richtext",
+            "id": "discount_description",
+            "label": "Discount Description"
+          },
+          {
+            "type": "text",
+            "id": "code",
+            "label": "Code"
+          }
+          
+       ]
+     }
+  ],
+  "presets": [
+    {
+      "name": "Discount Card List"
+    }
+  ]
+}
+{% endschema %}
+
+
+<style>
+    :root {
+        --surface-color: #fff;
+        --curve: 40;
+      }
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 4rem 5vw;
+        padding: 0;
+        list-style-type: none;
+      }
+      
+      .card {
+        position: relative;
+        display: block;
+        height: 100%;  
+        border-radius: calc(var(--curve) * 1px);
+        overflow: hidden;
+        text-decoration: none;
+        border: 1px solid;
+      }
+      
+      .card__image {      
+        width: 100%;
+        height: auto;
+      }
+      
+      .card__overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 1;      
+        border-radius: calc(var(--curve) * 1px);    
+        background-color: var(--surface-color);      
+        transform: translateY(100%);
+        transition: .2s ease-in-out;
+      }
+      
+      .card:hover .card__overlay {
+        transform: translateY(0);
+      }
+      
+      .card__header {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 2em;
+        padding: 2em;
+        border-radius: calc(var(--curve) * 1px) 0 0 0;    
+        background-color: var(--surface-color);
+        transform: translateY(-100%);
+        transition: .2s ease-in-out;
+      }
+      
+      .card__arc {
+        width: 80px;
+        height: 80px;
+        position: absolute;
+        bottom: 99.5%;
+        right: 0;      
+        z-index: 1;
+      }
+      
+      .card__arc path {
+        fill: var(--surface-color);
+        d: path("M 40 80 c 22 0 40 -22 40 -40 v 40 Z");
+      }       
+      
+      .card:hover .card__header {
+        transform: translateY(0);
+      }
+      
+      .card__thumb {
+        flex-shrink: 0;
+        width: 50px;
+        height: 50px;      
+        border-radius: 50%;      
+      }
+      
+      .card__title {
+        font-size: 1em;
+        margin: 0 0 .3em;
+        color: #6A515E;
+      }
+      
+      .card__tagline {
+        display: block;
+        margin: 1em 0;
+        font-family: "MockFlowFont";  
+        font-size: .8em; 
+        color: #D7BDCA;  
+      }
+      
+      .card__status {
+        font-size: .8em;
+        color: #D7BDCA;
+      }
+      
+      .card__description {
+        padding: 0 2em 2em;
+        margin: 0;
+        color: #D7BDCA;
+        font-family: "MockFlowFont";   
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+      }    
+      .discount_card_list_inner  p {
+        margin: 1em;
+        text-align: center;
+        font-size: 14px;
+        line-height: 1.1;
+    }
+    .discount_card_list_inner .code img {
+        max-width: 27px;
+        vertical-align:middle;
+        border-left: 1px dotted #000;
+        position: absolute;
+        right: 0;
+        top:0;
+    }
+    
+      .discount_card_list_inner  button.code {
+        padding-right: 40px;
+        border: 1px dotted #000;
+        position:relative;
+        top:0;
+        left:0;
+        
+    }
+    @media (max-width:768px){
+      .card__header {
+        padding:0.5em;
+        width:100%;
+        padding-bottom: 0;
+        transform: translateY(0);
+    }
+    .card{
+    text-align:center;
+    border-radius: 0;
+  }
+    .card__overlay {
+      transform: translateY(0);
+      border-radius: 0;
+  }
+  ul.cards {
+    grid-template-columns: repeat(2, minmax(150px, 1fr));
+    gap: 1em;
+}
+
+img.card__thumb {
+    display: none;
+}
+
+.card__header-text {
+    width: 100%;
+}
+
+.discount_card_list_inner p {
+    margin: 5px;
+    font-size: 10px;
+}
+
+.discount_card_list_inner button.code {
+    font-size: 10px;
+    padding-right: 22px;
+
+}
+.card__header-text h3.card__title {
+  font-size: 12px;
+  font-weight: bold;
+}
+.discount_card_list_inner .code img {
+    max-width: 19px;
+}
+  }
+ </style>   
+ <script>
+
+  function copyCode() {
+    // Get the text field
+    var copyText = document.getElementById("code");
+    // Select the text field
+    var copy= this.value;
+     // Copy the text inside the text field
+    navigator.clipboard.writeText(copy);
+
+    
+  }
+  
+</script>  

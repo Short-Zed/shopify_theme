@@ -1,0 +1,91 @@
+{{ 'collection-content-with-product-list-style.css' | asset_url | stylesheet_tag: preload: true }}
+
+<div class="page-width">
+    <div class="wrapper">
+       {% if section.settings.content_heading or section.settings.content %}
+       <div class="content_sec">
+          {% if section.settings.content_heading  %}
+          <h2 itemprop="H2" class="heading">{{ section.settings.content_heading }}</h2>
+          {% endif %}   
+          {% if section.settings.content %}
+          <div> {{ section.settings.content }}</div>
+          {% endif %}  
+       </div>
+       {%endif %}
+       <div class="product_list_sec">
+          {% if section.settings.content_heading  %}
+          <h2 itemprop="H2" class="heading">{{ section.settings.product_list_heading }} </h2> 
+          {% endif %}
+          <div class="product_header">
+             {% if section.settings.collection.title %}
+             <h3>{{ section.settings.collection.title }}</h3>
+             <h3>{{ 'collections.general.product_list_price' | t }}</h3>
+            {% endif %}
+          </div>
+          <div class="product_list_wrapper">
+             {% for product in section.settings.collection.products %}
+             <div class="product_list">
+                <a href="{{ product.url }}">{{ product.title }}</a>
+                <p class="price">{{product.price | money_with_currency}}</p>
+             </div>
+             {% endfor %}  
+          </div>
+       </div>
+    </div>
+ </div>
+ </div>
+
+
+{% schema %}
+{
+  "name": "Content With Product List",
+  "tag": "section",
+  "class": "content-with-product-list",
+  "limit": 1,
+  "settings": [
+    {
+        "type": "header",
+        "content": "Content"
+    },      
+    {
+      "type": "text",
+      "id": "content_heading",
+      "label": "Content heading"
+    },
+    {
+        "type": "richtext",
+        "id": "content",
+        "label": "Content"
+    },
+    {
+        "type": "header",
+        "content": "Product List"
+    }, 
+    {
+        "type": "text",
+        "id": "product_list_heading",
+        "label": "Product List heading"
+      }, 
+    {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      },
+      {
+        "type": "text",
+        "id": "product_list_title",
+        "label": "Product List title"
+      },
+      {
+        "type": "text",
+        "id": "product_list_price_title",
+        "label": "Product List price title"
+      } 
+  ],
+  "presets": [
+    {
+      "name": "Content With Product List"
+    }
+  ]
+}
+{% endschema %}

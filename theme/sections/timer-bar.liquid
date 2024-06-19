@@ -1,0 +1,182 @@
+<div class="timer_inner" id="timer_inner" >
+     {% if section.settings.text !="" %} 
+    <p style="color:{{ section.settings.text_color }}">{{section.settings.text }}  </p>
+      {% endif %}
+     <div style="color:{{ section.settings.text_color }}" class="time" id="timer_wrapper">
+       <span id="days"> </span>
+        <span id="hrs"> </span> :
+        <span id="min"> </span> :
+        <span id="sec"> </span>
+     </div>
+     <div class="text_wrap">
+     <span>Hours</span>
+     <span>Mins</span>
+     <span>Secs</span>
+    </div>
+  </div>        
+  
+  
+  
+  {% schema %}
+  {
+      "name":"Timer Bar",
+      "tag" :"section",
+      "class":"timer_sec_wrapper",
+      "settings":[
+          {
+              "type": "text",
+              "id": "text",
+              "label": "Bar Text",
+              "default": "Text"
+            },
+            {
+              "type": "color_background",
+              "id": "background",
+              "label": "Background",
+              "default": "linear-gradient(#000, #000000)"
+            },
+            {
+              "type": "color",
+              "id": "text_color",
+              "label": "Text Color",
+              "default": "#fff"
+            },
+         {
+             "type":"text",
+             "id":"countdown_timer_date",
+             "label":"Time to live",
+             "info":"Date time will be GMT",
+             "default":"July 02, 2020 15:00:00"
+          }
+            
+            
+      ],
+      "presets" :[
+          {
+          "name":"Timer Bar"
+          }
+      ]
+  
+  
+  
+  }
+  {% endschema %}
+  
+  <style>
+.timer_sec_wrapper {
+     background-image:{{ section.settings.background }};
+}
+
+.timer_sec_wrapper .timer_inner >.time span#hrs {
+    border-radius: 32px 8px 8px 32px;
+}
+
+.timer_sec_wrapper .timer_inner >.time span#sec {
+    border-radius: 8px 32px 32px 8px;
+}
+.timer_sec_wrapper .timer_inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+    max-width: 60%;
+    margin: 0 auto;
+    padding:0.5em 2em;
+  font-weight: bold;
+}
+.text_wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    min-width: 215px;
+    width: auto;
+}
+
+.text_wrap >span {
+    font-size: 14px;
+    line-height: normal;
+    text-transform: uppercase;
+    font-weight: 600;
+    width: 100%;
+    text-align: center;
+}
+.timer_sec_wrapper .timer_inner p {
+    margin: 0;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.timer_sec_wrapper .timer_inner >.time span#days {
+    display: none;
+}
+
+.timer_sec_wrapper .timer_inner >.time span {
+    font-size: 20px;
+    font-weight: 500;
+    border: 1px solid #000;
+    padding: 10px 20px;
+    width: 100%;
+    text-align: center;
+}
+    
+    @media (max-width:767px){
+      
+.timer_sec_wrapper .timer_inner {
+    max-width: 90%;
+}
+      .timer_sec_wrapper .timer_inner p {
+    font-size: 20px;
+}
+      
+    }
+  </style>
+  
+  <script type="text/javascript">
+  
+  
+   var countdown_timer_date = '{{section.settings.countdown_timer_date}}';
+    countdown_timer_date += " GMT";
+  
+    // Set the date we're counting down to
+    var countDownDate = new Date(countdown_timer_date).getTime();
+  
+    
+  // Update the count down every 1 second
+  var x = setInterval(function() {
+  
+    // Get today's date and time
+    var now = new Date().getTime();
+    
+    // Find the distance between now and the count down date
+  var distance = countDownDate - now;
+  
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    days = ("0" + days).slice(-2);
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+     hours = ("0" + hours).slice(-2);
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+     minutes = ("0" + minutes).slice(-2);
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+     seconds = ("0" + seconds).slice(-2);
+  
+     // Display the result in the element with id="timer_wrapper"
+     document.getElementById("days").innerHTML = days  ;
+     document.getElementById("hrs").innerHTML = hours ;
+     document.getElementById("min").innerHTML = minutes ;
+    document.getElementById("sec").innerHTML = seconds ;
+  
+    // If the count down is finished, write some text
+    if (distance < 0) {
+      clearInterval(x);
+      // document.getElementById("timer_wrapper").innerHTML = "EXPIRED";
+       document.getElementById("timer_inner").innerHTML = "SALE ENDED";
+    }
+  }, 1000);
+  
+  
+  
+  
+  </script>

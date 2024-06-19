@@ -1,0 +1,20 @@
+<canvas id="bg-animate"></canvas>   
+<style>
+    canvas#bg-animate {
+    display:none;
+    }
+    @media (max-width:768px){
+    canvas#bg-animate {
+        display:block;
+        width: 100%;
+        height: 100%;
+        position:absolute;
+        left:0;
+        top:0;
+        z-index:1;
+        opacity: 0.8;
+        box-shadow: 0 1em 2em 0.5em hsla(210deg, 35%, 0%, 0.1)
+      }
+    }
+
+ </style>   

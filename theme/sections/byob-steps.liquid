@@ -1,0 +1,145 @@
+<div class="byob_steps page-width">
+    {%  if section.settings.heading %}
+    <h2>{{ section.settings.heading }}</h2>
+    {% endif %}    
+    <div class="steps_card_wrap">
+        {% for block in section.blocks %}
+            <div class="steps_card border-animate">
+                <span> {{ forloop.index }} </span>
+                {{ block.settings.paragraph }}
+            </div>    
+        {% endfor %}    
+    </div>    
+</div>    
+
+{% schema %}
+{
+    "name":"BYOB Steps",
+    "tag" :"section",
+    "class":"byob_steps_wrapper",
+    "settings":[
+        {
+            "type": "text",
+            "id": "heading",
+            "label": "Heading",
+            "default": "How To Shop"
+          }  
+    ],
+    "blocks": [
+        {
+          "type": "steps",
+          "name": "steps",
+          "settings": [
+            {
+                "type": "richtext",
+                "id": "paragraph",
+                "label": "Paragraph"
+              }              
+          ]
+        }
+      ],
+    "presets" :[
+        {
+        "name":"BYOB Steps"
+        }
+    ]
+
+
+
+}
+{% endschema %}
+
+<style>
+
+    .byob_steps_wrapper {
+        margin: 4em 0;
+        text-align: center;
+    }
+    
+    .byob_steps >h2 {
+        font-size: 24px;
+        font-weight: 700;
+        position: relative;
+        top: 0;
+        left: 0;
+        margin:40px 0;
+    }
+    
+    .byob_steps >h2:before {
+        content: "";
+        display: inline-block;
+        width: 80px;
+        height: 1.5px;
+        background-color: #000;
+        position: absolute;
+        left: 50%;
+        margin-bottom: 59px;
+        bottom: 0;
+        transform: translate(-50%);
+    }
+    .steps_card_wrap {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+    
+    .steps_card_wrap .steps_card {
+        padding: 0.5em;
+        min-width: 350px;
+        position: relative;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5em;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .steps_card_wrap .steps_card span {
+        font-size: 30px;
+        font-weight: bolder;
+        line-height: normal;
+        font-family: math;
+    }
+    
+    .steps_card_wrap .steps_card  p {
+        margin: 0;
+        text-transform: uppercase;
+        font-size: 16px;
+    }
+
+
+    @media (max-width:1200px){
+        .steps_card_wrap .steps_card {
+            max-width: 200px;
+            min-width: 200px;
+            min-height: 180px;
+        }
+    }
+    @media (max-width:768px){
+        .steps_card_wrap .steps_card {
+            max-width: 100px;
+            min-width: 100px;
+            min-height: 100px;  
+            max-height: 150px;
+            padding: 0.5em;
+            gap: 0.5em;
+            justify-content: flex-start;
+        }
+        
+        .steps_card_wrap .steps_card span {
+            font-size: 18px;
+        }
+        
+        .steps_card_wrap .steps_card p {
+            font-size: 10px;
+        }
+        .byob_steps >h2:before,.index-section .theme-block h2:before {
+           display:none;
+        }
+        .byob_steps_wrapper {
+            margin: 2em 0;
+        }
+    }
+</style>    

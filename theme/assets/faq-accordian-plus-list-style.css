@@ -1,0 +1,117 @@
+.faq-custom .header {
+  text-align: center;
+  margin-bottom: 50px;
+}
+.faq-custom .faq-list-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 50px;
+}
+.faq-list .question h3 {
+  font-weight: 700;
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  font-family: var(--typeHeaderPrimary), var(--typeHeaderFallback);
+  letter-spacing: var(--typeHeaderSpacing);
+  line-height: var(--typeHeaderLineHeight);
+}
+.faq-list .question .icon-wrap, .faq-list > input {
+  display: none;
+}
+.faq-list .answer {
+  margin-bottom: 15px;
+}
+.faq-list .question label {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+}
+/* FAQ With accordian css */
+.show_accordian .faq-list .question {
+  color: inherit;
+  position: relative;
+  padding: 0 0 0 40px;
+  display: inline-flex;
+  align-items: center;
+}
+.show_accordian .faq-list .question .icon-wrap {
+  border: 1px solid;
+  border-color: #e8e8e1;
+  border-color: var(--colorBorder);
+  width: 28px;
+  height: 28px;
+  border-radius: 28px;
+  text-align: center;
+  right: auto;
+  left: 0;
+  display: block;
+  position: absolute;
+}
+.show_accordian .faq-list .question .icon-wrap >svg {
+  display: block;
+  width: 10px;
+  height: 10px;
+  transition: all .1s ease-in;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  fill: currentColor;
+}
+.show_accordian .faq-list .question h3 {
+  margin: 0;
+  font-weight: 600;
+  text-transform: capitalize;
+  cursor:default;
+}
+.show_accordian .faq-list .answer {
+  display: block;
+  margin: 11px 0;
+  padding-left: 38px;
+}
+.show_accordian .question span.que_count {
+  display: none;
+}
+.show_accordian .faq-list .question .icon-wrap {
+  display: none;
+}
+.faq-custom .show_accordian .faq-list-wrap .faq-list {
+  flex-basis: 25%;
+}
+.faq-custom .show_accordian .faq-list-wrap {
+  gap: 20px;
+  flex-wrap: nowrap;
+}
+.show_accordian .faq-list > input:checked + .question .icon-wrap svg {
+  transform: translate(-50%,-50%) rotate(180deg);
+}
+.faq-custom .header h2 {
+  font-size: 24px;
+  font-weight: 700;
+}
+@media (max-width: 768px) {
+  .show_accordian .faq-list .question h3{
+  cursor:pointer;
+}
+  .show_accordian .faq-list .question .icon-wrap {
+    display: block;
+  }
+  .faq-custom .faq-list-wrap {
+      flex-direction: column;
+      gap: 22px;
+ }
+  .show_accordian .faq-list .answer >p >br {
+    display: none;
+}
+  .faq-list .answer {
+      margin-left: 20px;
+ }
+  .show_accordian .faq-list .answer {
+      display: none;
+ }
+  .show_accordian .faq-list > input:checked ~ .answer {
+      display: block;
+ }
+}

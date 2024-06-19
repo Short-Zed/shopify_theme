@@ -1,0 +1,92 @@
+{{ 'faq-accordian-plus-list-style.css' | asset_url | stylesheet_tag: preload: true }}
+<div class="page-width{% if section.settings.show_accordian %} show_accordian {% endif %}" >
+  {% if section.settings.title %}
+    <div class="header">
+      <h2 itemprop="H2">{{ section.settings.title }}</h2>
+    </div>
+  {% endif %}
+  <div class="faq-list-wrap">
+    {% for block in section.blocks %}
+      {% case block.type %}
+        {% when 'FAQ' %}
+          {% if block.settings.question and block.settings.answer %}
+            <div class="faq-list">
+              <input type="checkbox" id="question-{{ forloop.index }}">
+              <div class="question">
+                <label for="question-{{ forloop.index }}">
+                  <div class="icon-wrap">
+                    <svg
+                      aria-hidden="true"
+                      focusable="false"
+                      role="presentation"
+                      class="icon icon--wide icon-chevron-down"
+                      viewBox="0 0 28 16"
+                    >
+                      <path d="M1.57 1.59l12.76 12.77L27.1 1.59" stroke-width="2" stroke="#000" fill="none" fill-rule="evenodd"></path>
+                    </svg>
+                  </div>
+                  <h3>
+                    <span class="que_count">{{ forloop.index }}. </span>{{ block.settings.question }}
+                  </h3>
+                </label>
+              </div>
+              <div class="answer">
+                {{ block.settings.answer }}
+              </div>
+            </div>
+          {% endif %}
+      {% endcase %}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "FAQ accordian plus list",
+  "tag": "section",
+  "class": "faq-custom",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_accordian",
+      "label": "Show accordian",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "name": "faq",
+      "type": "FAQ",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Question"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ accordian plus list",
+      "category": "FAQ accordian plus list",
+      "blocks": [
+        {
+          "type": "FAQ"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

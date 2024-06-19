@@ -1,0 +1,223 @@
+{% if settings.enable_free_gift %}
+    {% liquid 
+        assign free_product_id = settings.free_product_id
+        assign item_in_cart = false
+      %}
+      {% for item in cart.items %} 
+        {% if item.product.id == product_id_to_check %}
+          {% assign item_in_cart = true %}
+        {% endif %}
+      {% endfor %}
+      {% for Product in collections['free-sm-liquid-lipstick'].products %}
+        {%- assign current_variant = Product.selected_or_first_available_variant -%}
+    <div class="custom-gift-card">
+      <div class="custom-gift-wrapper" >
+        <div class="content">
+          <h2 class="title">{{ Product.title }}</h2>
+          <label for="variants">Select Variant:</label>
+       <div class="img_outer">          
+        <div class="img_wrapper">
+          <img src="{{ Product.featured_image | img_url:"master" }}">
+        </div>
+        <div class="variant_wrap">
+          <div class="variants"  id="variants">
+           {% for variant in Product.variants %}
+            <div class="variant {% if variant.title == 'Work Bae' %}selected{% endif %}" data-value="{{variant.id}}"><img src="{{ variant.featured_image | img_url:'master' }}" /></div>
+          {% endfor %} 
+        </div>
+        </div>
+      </div>
+        
+          <div class="bottom_content">
+            <div class="price">FREE</div>
+            <button type="button" {% unless current_variant.available %}disabled="disabled"{% endunless %} id="atc-btn" class="btn cart-offer-atc {% if item_in_cart %}item-remove{% endif %}">
+              {% if current_variant.available %}
+                {% if item_in_cart %}
+                  Remove
+                {% else %}
+                  Select
+                {% endif %}
+              {% else %}
+                {{ 'products.product.sold_out' | t }}
+              {% endif %}
+            </button>
+          </div>
+        </div>
+      </div>
+            </div>
+    {% endfor %} 
+
+{% endif %}
+
+
+<style>
+  .announcement-bottom-cart-drawer {
+    background: #b5499b;
+    padding: 0.5em 1em;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    text-align: center;
+    font-weight: bold;
+    border: 1px solid;
+    border-left: 0;
+    border-right: 0;
+    position: relative;
+    top: 0;
+    left: auto;
+    border-color: #b5499b;
+    z-index: 1;
+    border-bottom-color: #fff;
+}
+.custom-gift-wrapper {
+    display: none;
+    justify-content: start;
+    align-items: center;
+    gap: 5px;
+    border-radius: 5px;
+    margin: 10px 30px;
+    position: relative;
+    top: 0;
+    left: 0;
+    padding: 5px 10px;
+    background-color: rgba(255, 255, 255, 1);
+}
+  .custom-gift-card {
+    background: linear-gradient(#c6358b, #9198e5);
+    background-image:url("{{ 'gift-card-bg.jpg' | asset_url }}");
+}
+    .custom-gift-wrapper .img_wrapper img {
+        width: 100%;
+        height: auto;
+        max-width: 100px;
+        vertical-align: middle;
+    }
+    .custom-gift-wrapper .content .title, .custom-gift-card label:not(.variant__button-label):not(.text-label), .custom-gift-wrapper .bottom_content {
+      padding-left: 10px;
+      font-size: 10px;
+  }
+    .custom-gift-wrapper .img_wrapper {
+        flex-basis: 30%;
+    }
+    .custom-gift-card button#atc-btn {
+    min-width: 111px;
+    padding: 8px 8.8px;
+    line-height: normal;
+    background-color: #4b0082a8;
+}
+
+.custom-gift-card button#atc-btn:active {
+    background-color: #4b0082a8;
+}
+    .custom-gift-wrapper .variant_wrap {
+      display: flex;
+      justify-content: start;
+      align-items: start;
+      gap: 5px;
+      margin: 4px 0;
+      flex-direction: column;
+      flex-basis:70%;
+  }
+  .custom-gift-card label:not(.variant__button-label):not(.text-label) {
+    margin: 0;
+    letter-spacing: .2em;
+}
+    .custom-gift-wrapper .price {
+        font-weight: bold;
+        text-transform: capitalize;
+        letter-spacing: normal;
+        font-size: 14px;
+        line-height: normal;
+        display: inline;
+        margin-right: 5px;
+    }
+    .custom-gift-wrapper form input.btn {
+        padding: 3px 10px !important;
+        min-width: 60px;
+        letter-spacing: 0.2em;
+        font-size: 12px !important;
+    }
+    .custom-gift-wrapper .variant_wrap >select {
+        font-size: 12px !important;
+        padding: 3.6px 8px;
+        padding-right: 28px;
+
+    }
+    .custom-gift-wrapper .bottom_content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .custom-gift-wrapper .variant_wrap label {
+        margin: 0;
+        font-size: 12px !important;
+        letter-spacing: normal;
+        text-transform: capitalize;
+    }
+    
+    .custom-gift-wrapper .content .title {
+        font-size: 16px;
+        margin-bottom:5px;
+    }
+  .cart__item[data-product-id="47667557826843"],
+  .cart__item[data-product-id="47667557859611"],
+  .cart__item[data-product-id="47667557892379"],
+  .cart__item[data-product-id="47667557925147"],
+  .cart__item[data-product-id="47667557957915"],
+  .cart__item[data-product-id="47667557990683"],
+  .cart__item[data-product-id="47667558023451"],
+  .cart__item[data-product-id="47667558056219"],
+  .cart__item[data-product-id="47667558088987"],
+  .cart__item[data-product-id="47667558121755"],
+  .cart__item[data-product-id="47667558154523"],
+  .cart__item[data-product-id="47667558187291"]{
+    pointer-events: none;
+}
+    .cart__item[data-product-id="47667557826843"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667557859611"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667557892379"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667557925147"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667557957915"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667557990683"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558023451"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558056219"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558088987"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558121755"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558154523"] .cart__item-sub>div:first-child .js-qty__adjust--minus,
+    .cart__item[data-product-id="47667558187291"] .cart__item-sub>div:first-child .js-qty__adjust--minus{
+      pointer-events: initial;
+}
+.custom-gift-wrapper .variant_wrap div#variants {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  flex-wrap: wrap;
+}
+.custom-gift-wrapper .variant.selected >img {
+  border: 1px solid #000;
+  border-radius: 50%;
+}
+
+.custom-gift-wrapper .variant_wrap .variant {
+  cursor: pointer;
+  flex-basis: 15%;
+  line-height: 0;
+}
+.img_outer {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+@media (min-width:769px){
+  .custom-gift-wrapper .content .title,.custom-gift-card label:not(.variant__button-label):not(.text-label) {
+    text-align: center;
+}
+}
+@media (max-width:768px){
+  .custom-gift-wrapper .variant_wrap label {
+    font-size: 10px !important;
+}
+}
+</style> 

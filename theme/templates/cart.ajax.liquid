@@ -1,0 +1,142 @@
+{% comment %}
+  JS-load cart markup without bloat of a full layout.
+
+  This is used in both the cart drawer and cart page.
+  When a quantity is changed, this file is scraped and data-products
+    is fully replaced to account for possible cart discounts changing
+
+  The cart-wide discount div also replaces what is originally in the cart
+    as it can change anytime a cart-item changes
+{% endcomment %}
+
+{% layout none %}
+
+{% for item in cart.items %}
+  {% comment %} checking for upsell Products count   {% endcomment %} 
+  {% if item.id == 46705262362907 or item.id == 46705277796635 or item.id == 46705284808987 or item.id == 47135558304027 or item.id == or item.id == 47138264547611 or item.id == 47051022336283 or item.id == 47026954043675 or item.id == 47050349052187 or item.id == 47050551820571      %}
+    {% assign upsell_count = upsell_count | plus: 1 %}
+  {% endif %}
+
+   {% comment %} For custom gift card 
+    {% if item.id == 47667557826843 or item.id == 47667557859611 or item.id == 47667557892379 or item.id == 47667557925147 or item.id == 47667557957915 or item.id == 47667557990683 or item.id == 47667558023451 or item.id == 47667558056219 or item.id == 47667558088987 or item.id == 47667558121755 or item.id == 47667558154523 or item.id == 47667558187291 %}
+    {% assign upsell_count = upsell_count | plus: 1 %}
+      {% assign gift_id = item.id %}
+  {% endif %}
+{% endcomment %} 
+{% endfor %}
+
+<div
+  class="cart__items"
+  data-upsell-count="{% if upsell_count == blank %} 0 {% else %}{{upsell_count}}{% endif %}"
+  data-gift-id="{{ gift_id }}"
+  data-count="{{ cart.item_count }}"
+  data-cart-subtotal="{{ cart.total_price }}">
+
+  {% if cart.item_count  == 1 %} 
+    <style>
+      .bogo_wrapper.one{
+        display:block;
+      }
+      .bogo_wrapper.two{
+        display:none;
+      }
+     </style> 
+  {% elsif  cart.item_count  > 1 %} 
+  <style>
+    .bogo_wrapper.one{
+      display:none;
+    }
+    .bogo_wrapper.two{
+      display:block;
+    }
+    .bogo_offer_text{
+      display:none;
+    }
+   </style> 
+  {% endif %} 
+   {% comment %} {% render 'Bogo-banner' ,count:cart.item_count  %} {% endcomment %}
+{% comment %}
+  <div class="progress_wrapper gift_wrapper">
+ /* Amount Remaing to get the Free Gift*/ 
+ {% liquid 
+  assign firstGiftPrice = settings.cart_limit_amount
+  assign Cart_total_amount =  cart.total_price |divided_by: 100
+  assign Remaining_amount =   settings.cart_limit_amount  | minus: Cart_total_amount
+%}
+{% if settings.cart_limit_amount > Cart_total_amount %}
+<p class="amount-left-to-get-gift ">
+  🎁 Add <span class="blink_me red">₹{{Remaining_amount}}</span> to UNLOCK Liquid Lipstick + 30ml pure parfum
+</p> 
+{% else %}
+  {%  assign Remaining = 699  | minus: Cart_total_amount %}
+ {% if Cart_total_amount >= 699 %}
+  <p class="free-gift-eligible gift_wrapper" >
+    <span class="red">Congrats!</span> Lipstick + 30ml pure parfum is <br> UNLOCKED🔓
+     <br>  <span class="red">Note-</span>30ml pure parfum is added to your cart from our end. 
+  </p>
+     {% else %}
+     🎁 Add <span class="blink_me red">₹{{Remaining_amount}}</span> to  UNLOCK Liquid Lipstick + 30ml pure parfum
+      {% endif %}
+{% endif %}
+
+{% comment %} Progress Bar  {% endcomment %}
+<div class="bar_wrapper">
+{% comment %} <progress id="file" value="{{Cart_total_amount}}" max="{{firstGiftPrice}}">{{Remaining_amount}}</progress> {% endcomment %}
+<progress id="file" value="{% if Cart_total_amount %}{{Cart_total_amount}}{% else%}0{% endif %}" max="699"> {{Remaining}} </progress>
+<img class="img1" src="https://cdn.shopify.com/s/files/1/0687/1249/7435/files/Women_s_Day_Cart_Drawer.png?v=1709197340">
+{% comment %} <img class="img2" src="https://cdn.shopify.com/s/files/1/0687/1249/7435/files/png-icon.png?v=1705678513">  {% endcomment %}
+</div>
+<p class="bottom_text">
+  <span class="img_bottom_text">
+    0
+  </span>
+  {% comment %} <span class="img_bottom_text">
+    FREE @699
+  </span> {% endcomment %}
+  <span class="img_bottom_text">
+    FREE @699
+  </span>
+ </p>
+</div>
+
+ {% endcomment %}
+
+{% comment %} Free Gift Lipstick {% endcomment %}
+
+{% liquid 
+  assign Cart_total_amount =  cart.total_price |divided_by: 100
+%}
+{% if Cart_total_amount >= settings.cart_limit_amount  %}
+<style>
+     .custom-gift-wrapper {
+       display:flex !important;
+     }
+    /* .announcement-bottom-cart-drawer{
+      display:block !important;
+    } */
+</style>
+{% endif %}
+{% if upsell_count > 0 %}
+  <style>
+    .custom-gift-wrapper {
+      display:none !important;
+    }
+     /* .announcement-bottom-cart-drawer{
+      display:none !important;
+    } */
+</style>
+{% endif %}
+  {% for item in cart.items %}
+    {%- render 'cart-item', product: item -%}
+  {% endfor %}
+</div>
+<div class="cart__discounts cart__item-sub cart__item-row{% if cart.cart_level_discount_applications == blank %} hide{% endif %}">
+  <div>{{ 'cart.general.discounts' | t }}</div>
+  <div>
+    {% for cart_discount in cart.cart_level_discount_applications %}
+      <div class="cart__discount">
+        {{ cart_discount.title }} (-{{ cart_discount.total_allocated_amount | money }})
+      </div>
+    {% endfor %}
+  </div>
+</div>

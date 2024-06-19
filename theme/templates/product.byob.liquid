@@ -1,0 +1,94 @@
+<script src="{{ 'component-byob.js' | asset_url }}" defer="defer"></script>
+{{ 'component-byob.css' | asset_url | stylesheet_tag: preload: true }}
+
+{%- liquid 
+    assign collection = product.metafields.byob.collection
+    assign current_variant = product.selected_or_first_available_variant
+    assign per_row = 4
+  -%}
+<div class="tab-menu sticky-header center">
+    <ul class="tab-items">  
+        <li class="tab-item">
+            <a href="javascript:void(0);" class="tab active-tab" data-id="tab1">
+            <div class="sticky-header-bubble">
+                <h5>
+                {{product.title}}
+                </h5>
+                <span id="checkbox_count_tab_1_product" style="display: none;"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" class="check-icon"><path d="M10.0007 15.1709L19.1931 5.97852L20.6073 7.39273L10.0007 17.9993L3.63672 11.6354L5.05093 10.2212L10.0007 15.1709Z" fill="rgba(255,255,255,1)"></path></svg></span>
+                <p>{{product.metafields.byob.sub_heading}}</p>
+            </div>
+            </a>
+        </li>
+    </ul>
+</div>
+<script>
+    let totalproductSelection = 0;
+        totalproductSelection = totalproductSelection + Number(3);
+</script>
+{%- capture form_id -%}byob-form{%- endcapture -%}
+{%- form 'product', product, id: form_id, class: 'product-single__form' -%}
+  <div class="tab-content active-tab-content" data-product-limit="3" data-id="tab1">  
+  <div class="page-width">
+    <div class="grid">
+    {% for product in collections[collection].products %} 
+    <div {{ block.shopify_attributes }} {%- if block.type == 'product-grid' -%}data-scroll-to{%- endif -%}>
+        {%- render 'byob-product-grid-item',
+            product: product,
+            collection: collection,
+            per_row: per_row,
+          -%}
+        </div>
+      {% endfor %}
+  </div>
+</div> 
+  <div class="sticky_cart">
+          <div class="product-details page-width">
+            <div class="prd-details item-details-left">
+              <div class="prd-image-title">
+                <div class="prd__image">
+                  {%- assign img_url = product | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+                  <a href="{{ product.url }}" style="height: 0; padding-bottom: {{ 100 | divided_by: product.image.aspect_ratio }}%;">
+                    <img class="lazyload"
+                        data-src="{{ img_url }}"
+                        data-widths="[180, 360, 540]"
+                        data-aspectratio="{{ product.aspect_ratio }}"
+                        data-sizes="auto"
+                        alt="{{ product.product.title | escape }}">
+
+                    <noscript>
+                      <img class="lazyloaded"
+                        src="{{ product | img_url: '400x' }}"
+                        alt="{{ product.product.title | escape }}">
+                    </noscript>
+                  </a>
+                </div>
+                <h3>{{product.title}}</h3>
+              </div>
+            </div>
+            <div class="prd-details item-details-right">
+              <div class="item-image-price-cart">
+                <div class="item-price">Total: {{product.price | money }}/-</div>
+                <button type="submit" id="submit-btn" name="add" class="product-form__submit btn" disabled="true">Add to cart</button>
+              </div>
+            </div>
+          </div>
+          <select name="id" data-product-select class="product-single__variants no-js">
+            {%- for variant in product.variants -%}
+              {%- if variant.available -%}
+                <option {% if variant == product.selected_or_first_available_variant %}
+                  selected="selected"{% endif %}
+                  value="{{ variant.id }}"
+                  data-sku="{{ variant.sku }}"
+                >
+                  {{ variant.title }} - {{ variant.price | money_with_currency }}
+                </option>
+              {%- else -%}
+                <option disabled="disabled">
+                  {{ variant.title }} - {{ 'products.product.sold_out' | t }}
+                </option>
+              {%- endif -%}
+            {%- endfor -%}
+          </select>
+  </div>
+{%- endform -%}
+</div>

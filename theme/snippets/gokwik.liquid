@@ -1,0 +1,185 @@
+{% if settings.envType == 'production' %}
+{% assign env = 'pdp' %}
+{% elsif settings.envType == 'sandbox' %}
+{% assign env = 'sandbox.pdp' %}
+{%endif%}
+
+<script>
+{% if settings.goEnable %}
+window.merchantInfo  = {
+        mid: "{{ settings.mid }}",
+        environment: "{{ settings.envType }}",
+        type: "merchantInfo",
+  		storeId: "{{shop.id}}",
+  		fbpixel: "{{settings.fbpixel}}",
+      }
+var productFormSelector = '';
+var cart = {{ cart | json }}
+var templateName = '{{template.name}}'
+</script>
+
+<script src="https://{{ env }}.gokwik.co/merchant-integration/build/merchant.integration.js?v4"></script>
+<script src="https://analytics.gokwik.co/analytics.js" id="gokwikHeaderAnalytics"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js" integrity="sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script>
+  console.log('//////');
+function setCookie(c_name, value, exdays) { 
+    var exdate = new Date();
+    exdate.setDate(exdate.getDate() + exdays);
+    var c_value = escape(value) + ((exdays == null) ? "" : "; expires=" + exdate.toUTCString());
+    document.cookie = c_name + "=" + c_value;
+  }
+  
+  document.addEventListener('UFE_CHECKOUT_FINALIZED', (event) => {
+  console.log('jayho');
+   	const { detail: UFEcheckoutInfo } = event || {};
+	const { checkout, acknowledge } = UFEcheckoutInfo || {};
+    console.log(UFEcheckoutInfo,'papainfo');
+	let decryptedResponse = CryptoJS.AES.decrypt(checkout, 'ggUiF-TsiFp-bhqTT-xGmNS-gRQRj-dMHSD');
+      decryptedResponse = JSON.parse(decryptedResponse.toString(CryptoJS.enc.Utf8));
+     console.log(decryptedResponse);
+  const { discountCode, line_items, currency, notes } = decryptedResponse || {};
+      setCookie('discount_code', discountCode, 1);
+   
+	//if (acknowledge && typeof acknowledge === 'function') acknowledge();
+ 
+});
+</script>
+<style>
+{% if settings.goEnable %}
+.gokwik-checkouts {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: end;
+  margin-bottom: 10px;
+}
+.gokwik-checkouts button {
+  max-width:100%;
+  width: 100%;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: {{ settings.priClr }};
+  position: relative;
+  margin: 0;
+  padding: 5px 10px;
+  height:48.5px;
+}
+#gokwik-buy-now.disabled, .gokwik-disabled{
+  opacity:0.5;
+  cursor: not-allowed;
+  }
+  .gokwik-checkouts button:focus {
+  outline: none;
+}
+.gokwik-checkouts button > span {
+  display: flex;
+}
+.gokwik-checkouts button > span.btn-text {
+  display: flex;
+  flex-direction: column;
+  color: {{ settings.secClr }};
+  align-items: flex-start;
+}
+.gokwik-checkouts button > span.btn-text > span:last-child {
+	padding-top: 2px;
+    font-size: 10px;
+    line-height: 10px;
+    text-transform: initial;
+}
+.gokwik-checkouts button > span.btn-text > span:first-child {
+   font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+}
+.gokwik-checkouts button > span.pay-opt-icon img:first-child {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+/*   Additional */
+
+
+ 
+{% endif %}
+  
+{% if settings.goBuynowEnable %}
+ #gokwik-buy-now {
+   background: {{ settings.btnBClr }};
+   max-width: 600px;
+   width: 100%;
+   color: {{ settings.btnTextClr }};
+   cursor: pointer;
+   line-height: 1;
+   border: none;
+   padding: 15px 10px;
+   font-size: 16px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+   position:relative;
+ }
+
+  
+{% endif %}
+/* Loader CSS */
+  #btn-loader{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    justify-content: center;
+    align-items: center;
+    background:{{ settings.priClr }};
+    border-radius:2.5rem;
+    
+  } 
+
+.cir-loader,
+.cir-loader:after {
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+}
+.cir-loader {
+  margin: 6px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-right: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 0.5em solid rgba(255, 255, 255, 0.2);
+  border-left: 0.5em solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+</style> 
+{% endif  %}
+

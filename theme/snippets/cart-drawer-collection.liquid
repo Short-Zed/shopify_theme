@@ -1,0 +1,66 @@
+{{ 'component-cart-offer.css' | asset_url | stylesheet_tag: preload: true }}
+{%- if settings.cart_type == 'drawer' -%}
+    <div class="page-width cart-offer-container">
+      <div class="section-header{% if section.settings.view_all %}{% unless settings.type_headers_align_text %} section-header--with-link{% endunless %}{% endif %}">
+        <h2 itemprop="H2" class="section-header__title">
+         🎁Add more luxury to your cart!🎁
+        </h2>
+   {% comment %}     <p class="bogo_offer_text">Select 1 more to avail FREE Product!</p> {% endcomment %}
+      </div>
+      <div class="cart-offer-items">
+        {% for product in collections['cart-upsell'].products limit:6 %}
+        {%- assign current_variant = product.selected_or_first_available_variant -%}
+        {% assign product_id_to_check = product.id %}
+        {% assign item_in_cart = false %}
+
+        {% for item in cart.items %} 
+          {% if item.product.id == product_id_to_check %}
+            {% assign item_in_cart = true %}
+          {% endif %}
+        {% endfor %}
+
+          {% comment %} <style>
+            .cart__item[data-product-id="{{current_variant.id}}"] .cart__item-sub{
+              pointer-events: none !important;
+            }
+            .cart__item[data-product-id="{{current_variant.id}}"] .cart__item-sub .js-qty__adjust{
+              pointer-events: none !important;
+              opacity: 0 !important;
+            }
+          </style> {% endcomment %}
+          <div class="product-item" data-product-id="{{current_variant.id}}">
+            <div class="product-image">
+              {%- assign preview_image = product.featured_media.preview_image -%}
+              {%- assign img_url = preview_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+              <img class="lazyload{% unless settings.product_grid_image_fill %} grid__image-contain{% endunless %}"
+                data-src="{{ img_url }}"
+                data-widths="[360, 540, 720, 900, 1080]"
+                data-aspectratio="{{ preview_image.aspect_ratio }}"
+                data-sizes="auto"
+                alt="{{ preview_image.alt | escape }}">
+            </div>
+            <div class="product-meta">
+              <h2 itemprop="H2">{{ product.title }}</h2>
+              <p>
+                <span class="product__price on-sale">
+                  {{ product.price | money }}
+                </span>
+                <span class="product__price product__price--compare">{{ product.compare_at_price | money }}</span></p>
+              
+              <button type="button" {% unless current_variant.available %}disabled="disabled"{% endunless %} onclick="add_to_cart_grid({{current_variant.id}},1)" class="btn cart-offer-atc {% if item_in_cart %}item-remove{% endif %}">
+                {% if current_variant.available %}
+                  {% if item_in_cart %}
+                    Remove
+                  {% else %}
+                    Add
+                  {% endif %}
+                {% else %}
+                  {{ 'products.product.sold_out' | t }}
+                {% endif %}
+              </button>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+{%- endif -%}
