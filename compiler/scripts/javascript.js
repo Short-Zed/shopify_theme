@@ -9,7 +9,7 @@ import {
   flattenPath,
 } from '../utils/index.js';
 
-export const copyJS = ({ path: srcPath, isDirectory = false }) => {  
+export const copyJS = ({ path: srcPath, isDirectory = false }) => {
   try {
     /**
      * Check if a file already exists in theme/assets
@@ -21,7 +21,7 @@ export const copyJS = ({ path: srcPath, isDirectory = false }) => {
      * Check if the file is compiled/uncompiled
      */
     if (!data.toString().includes(jsComment)) {
-      console.warn(`${overwriteMessage} Check '${srcPath}'`)
+      console.warn(`${overwriteMessage} Check '${srcPath}'`);
       return; // exit
     }
   } catch (e) {
@@ -59,10 +59,10 @@ export const copyJS = ({ path: srcPath, isDirectory = false }) => {
              * Run during watch on one file
              * 
              * Get filename from path passed
-             * src/scripts/example.js -> example.js
+             * src/scripts/example.js -> component-example.js
              */
             const outputPath = path.join("assets", flattenPath(srcPath, 'scripts'));
-            const fileName = path.basename(srcPath); // Extract filename from srcPath
+            const fileName = `component-${path.basename(srcPath)}`; // Prefix filename with "component-"
 
             // Add the file's theme/assets path file to .gitignore
             gitIgnoreAdd(path.join("theme", outputPath));
